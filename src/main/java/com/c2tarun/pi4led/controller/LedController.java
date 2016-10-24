@@ -2,27 +2,45 @@ package com.c2tarun.pi4led.controller;
 
 
 import com.pi4j.io.gpio.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class LedController {
 
-    private static GpioPinDigitalOutput pin;
+    @Autowired(required = true)
+    @Qualifier("redLed")
+    private GpioPinDigitalOutput redLedPin;
+
+    @Autowired(required = true)
+    @Qualifier("yellowLed")
+    private GpioPinDigitalOutput yellowLedPin;
 
     @RequestMapping("/")
     public String greeting() {
         return "Hello world!";
     }
 
-    @RequestMapping("/light")
-    public String light() {
-        if (pin == null) {
-            GpioController gpioController = GpioFactory.getInstance();
-            pin = gpioController.provisionDigitalOutputPin(RaspiPin.GPIO_24, "MyLED", PinState.LOW);
+    @RequestMapping("/redlight")
+    public String redLight() {
+        redLedPin.toggle();
+        if(redLedPin.isHigh()) {
+            return "Red LED ON";
+        } else {
+            return "Red LED OFF";
         }
-        pin.toggle();
-        return "OK";
+    }
+
+    @RequestMapping("/yellowlight")
+    public String yellowLight() {
+        yellowLedPin.toggle();
+        if(yellowLedPin.isHigh()) {
+            return "Yellow LED ON";
+        } else {
+            return "Yellow LED OFF";
+        }
     }
 
 }

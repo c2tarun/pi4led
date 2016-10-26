@@ -1,6 +1,7 @@
 package com.c2tarun.pi4led.controller;
 
 import com.pi4j.io.gpio.GpioPinDigitalOutput;
+import com.pi4j.io.gpio.PinState;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -29,21 +30,30 @@ public class RelaySwitchController {
     @Qualifier("IN4")
     GpioPinDigitalOutput in4;
 
-    @RequestMapping("/relay/{pinId}")
-    public String toggleIn1(@PathVariable("pinId") int pinId) {
+    @RequestMapping("/relay/{pinId}/{action}")
+    public String toggleIn1(@PathVariable("pinId") int pinId, @PathVariable("action") String action) {
         switch (pinId) {
             case 1:
-                in1.toggle();
+                performAction(in1, action);
                 break;
             case 2:
-                in2.toggle();
+                performAction(in2, action);
                 break;
             case 3:
-                in3.toggle();
+                performAction(in3, action);
                 break;
             case 4:
-                in4.toggle();
+                performAction(in4, action);
         }
-        return pinId + " Toggled";
+        return "Action Successfull";
     }
+
+    private void performAction(GpioPinDigitalOutput gpioPin, String action) {
+        if("on".equals(action)) {
+            gpioPin.setState(PinState.LOW);
+        } else {
+            gpioPin.setState(PinState.HIGH);
+        }
+    }
+
 }

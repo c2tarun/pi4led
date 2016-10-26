@@ -1,7 +1,7 @@
 package com.c2tarun.pi4led.controller;
 
 
-import com.pi4j.io.gpio.*;
+import com.pi4j.io.gpio.GpioPinDigitalOutput;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.RequestMapping;
